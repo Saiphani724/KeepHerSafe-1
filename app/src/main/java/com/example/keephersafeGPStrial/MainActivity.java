@@ -76,16 +76,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        viewProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent userIntent = getIntent();
-                String user = userIntent.getStringExtra("user");
-                Intent ProfilePage = new Intent(MainActivity.this,ProfileActivity.class);
-                ProfilePage.putExtra("user",user);
-                startActivity(ProfilePage);
-            }
-        });
+//        viewProfile.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent userIntent = getIntent();
+//                String user = userIntent.getStringExtra("user");
+//                Intent ProfilePage = new Intent(MainActivity.this,ProfileActivity.class);
+//                ProfilePage.putExtra("user",user);
+//                startActivity(ProfilePage);
+//            }
+//        });
 
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if(!bluetoothAdapter.isEnabled())
@@ -249,9 +249,11 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.profile) {
-            // do something here
-        }
+        Intent userIntent = getIntent();
+        String user = userIntent.getStringExtra("user");
+        Intent ProfilePage = new Intent(MainActivity.this,ProfileActivity.class);
+        ProfilePage.putExtra("user",user);
+        startActivity(ProfilePage);
         return super.onOptionsItemSelected(item);
     }
 }
