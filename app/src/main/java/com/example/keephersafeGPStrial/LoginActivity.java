@@ -47,6 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         if(res == true)
         {
             Intent HomePage = new Intent(LoginActivity.this,MainActivity.class);
+            HomePage.putExtra("user",user);
             startActivity(HomePage);
         }
         else

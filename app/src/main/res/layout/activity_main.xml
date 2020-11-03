@@ -93,6 +93,12 @@
 
         android:text="Send SOS " />
 
+    <Button
+        android:id="@+id/profile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="View Profile" />
+
 
 
 </LinearLayout>

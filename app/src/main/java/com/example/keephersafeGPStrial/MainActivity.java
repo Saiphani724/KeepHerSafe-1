@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     SmsManager smsManager;
     SharedPreferences myPref;
     private Button sendSOS;
+    private Button viewProfile;
     Switch simpleSwitch;
     ArrayList<Double> hrvs;
     double hrv;
@@ -57,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         sendSOS = findViewById(R.id.SOSbutton);
+        viewProfile = findViewById(R.id.profile);
         hearrateTV = findViewById(R.id.hearrateTV);
         avgHRV = findViewById(R.id.avgHRV);
         simpleSwitch = findViewById(R.id.simpleSwitch);
@@ -69,6 +71,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 sendManualSOS();
+            }
+        });
+
+        viewProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent userIntent = getIntent();
+                String user = userIntent.getStringExtra("user");
+                Intent ProfilePage = new Intent(MainActivity.this,ProfileActivity.class);
+                ProfilePage.putExtra("user",user);
+                startActivity(ProfilePage);
             }
         });
 
