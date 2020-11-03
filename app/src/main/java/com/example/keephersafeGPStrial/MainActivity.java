@@ -17,6 +17,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
 import android.telephony.SmsManager;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -231,5 +233,25 @@ public class MainActivity extends AppCompatActivity {
 //        Intent i=new Intent(this,  MyBluetoothService.class);
 //        stopService(i);
 
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // R.menu.actionbar is a reference to an xml file named actionbar.xml which should be inside your res/menu directory. 
+        // If you don't have res/menu, just create a directory named "menu" inside res
+        getMenuInflater().inflate(R.menu.actionbar, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    // handle button activities
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.profile) {
+            // do something here
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
