@@ -112,7 +112,7 @@ public class DangerTrigger extends AppCompatActivity {
 //        phoneNumbers.add("");
 //        phoneNumbers.add("");
 //        phoneNumbers.add("");
-        phoneNumbers.add("9491212790");
+        phoneNumbers.add("9246465080");
         for(int i = 0;i < phoneNumbers.size();i++){
             smsManager.sendTextMessage(phoneNumbers.get(i),null,"HELP NEEDED! http://www.google.com/maps/place/" + myPref.getString("Latitude","0.00") + "," + myPref.getString("Longitude","0.00"),null,null);
         }

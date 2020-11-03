@@ -12,11 +12,7 @@
 
 
 
-    <EditText
-        android:id="@+id/edit_text_input"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Input" />
+
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
@@ -56,13 +52,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="startService"
-        android:layout_marginTop="450dp"
+        android:layout_marginTop="480dp"
         android:text="Start Service" />
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="stopService"
-        android:layout_marginTop="500dp"
+        android:layout_marginTop="550dp"
         android:text="Stop Service" />
 
     <androidx.cardview.widget.CardView
@@ -88,13 +84,14 @@
         android:id="@+id/calibrate"
         android:layout_gravity="center"
         android:layout_width="match_parent"
-        android:layout_marginTop="350dp"
-        android:layout_height="100dp"
+        android:layout_marginTop="370dp"
+        android:layout_height="wrap_content"
         card_view:cardCornerRadius="4dp">
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="20dp"
             android:text="Average Heart Rate Calibrated"
             android:gravity="center"
             android:id="@+id/avgHRV"
@@ -108,8 +105,10 @@
         android:id="@+id/SOSbutton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="550dp"
+        android:layout_marginTop="650dp"
         android:text="Send SOS " />
+
+
 
 
 </RelativeLayout>

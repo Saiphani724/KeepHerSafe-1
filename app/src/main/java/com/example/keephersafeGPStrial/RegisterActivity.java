@@ -53,7 +53,7 @@ public class RegisterActivity extends AppCompatActivity {
                 String user = mTextUsername.getText().toString().trim();
                 String pwd = mTextPassword.getText().toString().trim();
                 String height = mTextHeight.getText().toString().trim();
-                String weight = mTextHeight.getText().toString().trim();
+                String weight = mTextWeight.getText().toString().trim();
                 String age = mTextAge.getText().toString().trim();
                 String emg1 = mTextEmg1.getText().toString().trim();
                 String emg2 = mTextEmg2.getText().toString().trim();

@@ -31,6 +31,7 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private EditText editText;
@@ -40,10 +41,12 @@ public class MainActivity extends AppCompatActivity {
     SmsManager smsManager;
     SharedPreferences myPref;
     private Button sendSOS;
+    private Button viewProfile;
     Switch simpleSwitch;
     ArrayList<Double> hrvs;
     double hrv;
     int hrIndex = 0;
+    double tot = 0, mean, stdDev, scaleOfElimination = 1.5;
 
 
     public void toast(String mess) {
@@ -54,14 +57,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        editText = findViewById(R.id.edit_text_input);
+
 
         sendSOS = findViewById(R.id.SOSbutton);
+        viewProfile = findViewById(R.id.profile);
         hearrateTV = findViewById(R.id.hearrateTV);
         avgHRV = findViewById(R.id.avgHRV);
         simpleSwitch = findViewById(R.id.simpleSwitch);
 
-        hrvs = new ArrayList (Collections.nCopies(10, 0.0));
+        hrvs = new ArrayList (Collections.nCopies(100, 0.0));
 
 
 
@@ -71,6 +75,17 @@ public class MainActivity extends AppCompatActivity {
                 sendManualSOS();
             }
         });
+
+//        viewProfile.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent userIntent = getIntent();
+//                String user = userIntent.getStringExtra("user");
+//                Intent ProfilePage = new Intent(MainActivity.this,ProfileActivity.class);
+//                ProfilePage.putExtra("user",user);
+//                startActivity(ProfilePage);
+//            }
+//        });
 
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if(!bluetoothAdapter.isEnabled())
@@ -112,8 +127,34 @@ public class MainActivity extends AppCompatActivity {
         startService(i);
     }
 
-    public boolean isEmergency(double hrv){
-        return !(hrv >=63 && hrv <= 87);
+    public boolean isEmergency(){
+
+        tot = 0;
+        for(double d : hrvs){
+            tot += d;
+        }
+
+        mean = tot / hrvs.size();
+
+
+        double temp = 0;
+
+        for (double a : hrvs) {
+            temp += (a - mean) * (a - mean);
+        }
+
+        stdDev = Math.sqrt(temp / (hrvs.size() - 1));
+
+
+        final List<Integer> newList = new ArrayList<>();
+
+
+        boolean isLessThanLowerBound = hrv < (mean - stdDev * scaleOfElimination);
+        boolean isGreaterThanUpperBound = hrv > (mean + stdDev * scaleOfElimination);
+        boolean isOutOfBounds = isLessThanLowerBound || isGreaterThanUpperBound;
+
+//        return !(hrv >=63 && hrv <= 87);
+        return isOutOfBounds;
     }
 
     public class ServiceToActivity extends BroadcastReceiver
@@ -126,17 +167,13 @@ public class MainActivity extends AppCompatActivity {
 
             // newData is from the service
 
-
-
-
-
             String[]  data = newData.split(";");
 
             if(data[0].equals("datapoint")){
                 hrv = Double.parseDouble(data[1]);
                 hearrateTV.setText("Heart Rate Detected " + hrv);
 
-                if(isEmergency(hrv) && !simpleSwitch.isChecked()){
+                if(isEmergency() && !simpleSwitch.isChecked()){
                     sendManualSOS();
                 }
 
@@ -145,15 +182,13 @@ public class MainActivity extends AppCompatActivity {
                     hrvs.set(hrIndex , Double.parseDouble(data[1]));
                     hrIndex = (hrIndex + 1) % hrvs.size();
 
-                    double tot = 0;
-                    for(double d : hrvs){
-                        tot += d;
-                    }
+                    avgHRV.setText(
+                             hrvs.toString() + "\n\n" +
+                            "Average Heart Rate = " + mean  + " \nStdDev =" + stdDev + "\n"
+                            + "LowerBound = " + (mean - stdDev * scaleOfElimination) + "\n"
+                            + "UpperBound = " + (mean + stdDev * scaleOfElimination) + "\n"
+                    );
 
-
-                    avgHRV.setText("Average Heart Rate Calibrated " + tot/hrvs.size()  + " " + tot  + "\n" + hrvs.toString() + " " + data[2]);
-
-//                    toast(hrvs.toString());
                 }
             }
 
@@ -164,11 +199,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void startService(View v){
-        String input = editText.getText().toString();
-
 
         Intent serviceIntent  = new Intent(this,LocationService.class);
-        serviceIntent.putExtra("inputExtra",input);
         ContextCompat.startForegroundService(this,serviceIntent);
     }
     public void stopService(View v) {
@@ -187,9 +219,11 @@ public class MainActivity extends AppCompatActivity {
         phoneNumbers = new ArrayList<>();
         phoneNumbers.add("9246465080");
         for(int i = 0;i < phoneNumbers.size();i++){
+            String tosend = "HELP NEEDED!  "+ hrv+ "\n http://www.google.com/maps/place/" +  myPref.getString("Latitude","0.00") + "," + myPref.getString("Longitude","0.00");
+            toast(tosend);
+
             smsManager.sendTextMessage(phoneNumbers.get(i),null,"HELP NEEDED!  "+ hrv+ "\n http://www.google.com/maps/place/" + myPref.getString("Latitude","0.00") + "," + myPref.getString("Longitude","0.00"),null,null);
         }
-
     }
 
     @Override
@@ -215,9 +249,11 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.profile) {
-            // do something here
-        }
+        Intent userIntent = getIntent();
+        String user = userIntent.getStringExtra("user");
+        Intent ProfilePage = new Intent(MainActivity.this,ProfileActivity.class);
+        ProfilePage.putExtra("user",user);
+        startActivity(ProfilePage);
         return super.onOptionsItemSelected(item);
     }
 }
