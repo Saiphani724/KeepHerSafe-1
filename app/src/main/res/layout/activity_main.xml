@@ -43,7 +43,7 @@
             android:layout_marginTop="70dp"
             android:layout_toRightOf="@id/calib"
             android:gravity="center"
-            android:background="#8A9191"
+            android:background="@drawable/mybutton"
             android:onClick="startBtService"
             android:text="Reconnect Bluetooth" />
 
@@ -60,9 +60,9 @@
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:onClick="startService"
-            android:layout_marginTop="490dp"
+            android:layout_marginTop="500dp"
             android:layout_marginLeft="30dp"
-            android:background="#8A9191"
+            android:background="@drawable/mybutton"
             android:text="Start Service" />
         <Button
             android:id="@+id/stopButton"
@@ -70,8 +70,8 @@
             android:layout_height="wrap_content"
             android:onClick="stopService"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="490dp"
-            android:background="#8A9191"
+            android:layout_marginTop="500dp"
+            android:background="@drawable/mybutton"
             android:layout_toRightOf="@id/startButton"
             android:text="Stop Service" />
 
@@ -85,7 +85,7 @@
         android:layout_width="match_parent"
         android:layout_marginTop="170dp"
         android:layout_height="80dp"
-        card_view:cardCornerRadius="4dp">
+        card_view:cardCornerRadius="5dp">
 
         <TextView
             android:layout_width="match_parent"
@@ -104,7 +104,7 @@
         android:layout_width="match_parent"
         android:layout_marginTop="260dp"
         android:layout_height="220dp"
-        app:cardCornerRadius="4dp">
+        app:cardCornerRadius="5dp">
 
         <TextView
             android:id="@+id/avgHRV"
@@ -124,7 +124,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="580dp"
-        android:background="#8A9191"
+        android:background="@drawable/mybutton"
         android:text="Send SOS " />
 
 
