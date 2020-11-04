@@ -63,7 +63,7 @@
             android:layout_width="wrap_content"
             android:layout_height="35dp"
             android:textColor="#ffffff"
-            android:text="not_registered"/>
+            android:text="Not registered?"/>
 
         <TextView
             android:id="@+id/textview_register"
