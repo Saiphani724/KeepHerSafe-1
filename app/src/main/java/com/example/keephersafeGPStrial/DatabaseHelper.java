@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.Toast;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME ="register.db";
@@ -26,7 +27,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL("CREATE TABLE registeruser (ID INTEGER PRIMARY  KEY AUTOINCREMENT, username TEXT, password TEXT, height TEXT, weight TEXT, emg1 TEXT, emg2 TEXT,age TEXT )");
+        Log.d("Createion Reg DB","Called");
+        sqLiteDatabase.execSQL("CREATE TABLE registeruser (username TEXT, password TEXT, height TEXT, weight TEXT, emg1 TEXT, emg2 TEXT,age TEXT )");
     }
 
     @Override
@@ -46,7 +48,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put("emg2",emg2);
         contentValues.put("age", s);
         long res = db.insert("registeruser",null,contentValues);
-//        sqLiteDatabase.execSQL();
+
         db.close();
         return  res;
     }

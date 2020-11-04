@@ -1,12 +1,17 @@
 package com.example.keephersafeGPStrial;
 
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -14,9 +19,12 @@ import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 
 import android.telephony.SmsManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,6 +40,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
     private EditText editText;
@@ -43,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private Button sendSOS;
     private Button viewProfile;
     Switch simpleSwitch;
+    Double latitude, longitude;
     ArrayList<Double> hrvs;
     double hrv;
     int hrIndex = 0;
@@ -102,10 +112,19 @@ public class MainActivity extends AppCompatActivity {
         Intent i=new Intent(this,  MyBluetoothService.class);
         startService(i);
 
+        Intent serviceIntent  = new Intent(this,LocationService.class);
+        ContextCompat.startForegroundService(this,serviceIntent);
+
 
         ServiceToActivity serviceReceiver = new ServiceToActivity();
         IntentFilter intentSFilter = new IntentFilter("ServiceToActivityAction");
         registerReceiver(serviceReceiver, intentSFilter);
+
+
+        ServiceToActivity serviceReceiver1 = new ServiceToActivity();
+        IntentFilter intentSFilter1 = new IntentFilter("LocServiceToActivityAction");
+        registerReceiver(serviceReceiver1, intentSFilter1);
+
     }
 
 
@@ -157,40 +176,94 @@ public class MainActivity extends AppCompatActivity {
         return isOutOfBounds;
     }
 
+    public synchronized void  startCoolDown() {
+
+        EntityModel model = new EntityModel();
+        model.prediction = 1;
+        model.decision = 1;
+        model.id = new Random().nextInt(1000);
+        model.latitude = latitude;
+        model.longitude = longitude;
+
+        Log.d("LocationService","CoolDown Activated");
+        Intent intent = new Intent(this,DangerTrigger.class);
+        intent.putExtra("DataPoint",model);
+        PendingIntent inte = PendingIntent.getActivity(this,1,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+        if (Build.VERSION.SDK_INT >= 26) {
+            String CHANNEL_ID = "my_channel_02";
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
+                    "My Channel_2",
+                    NotificationManager.IMPORTANCE_HIGH);
+
+            ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(channel);
+
+            Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
+                    .setContentIntent(inte)
+                    .setContentTitle("CoolDown Mode Activated ")
+                    .setContentText("Abnormal HeartRate detected.. Please click here to terminate SOS")
+                    .setSmallIcon(R.drawable.ic_baseline_warning_24)
+                    .setAutoCancel(true)
+                    .build();
+            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+
+            notificationManager.notify(2, notification);
+
+//            startForeground(2, notification);
+
+        }
+
+    }
+
+
     public class ServiceToActivity extends BroadcastReceiver
     {
         @Override
         public void onReceive(Context context, Intent intent)
         {
-            Bundle notificationData = intent.getExtras();
-            String newData  = notificationData.getString("ServiceToActivityKey");
 
-            // newData is from the service
+            if(intent.getAction().equals("ServiceToActivityAction"))
+            {
+                Bundle notificationData = intent.getExtras();
+                String newData  = notificationData.getString("ServiceToActivityKey");
 
-            String[]  data = newData.split(";");
+                // newData is from the service
 
-            if(data[0].equals("datapoint")){
-                hrv = Double.parseDouble(data[1]);
-                hearrateTV.setText("Heart Rate Detected " + hrv);
+                String[]  data = newData.split(";");
 
-                if(isEmergency() && !simpleSwitch.isChecked()){
-                    sendManualSOS();
+                if(data[0].equals("datapoint")){
+                    hrv = Double.parseDouble(data[1]);
+                    hearrateTV.setText("Heart Rate Detected " + hrv);
+
+                    if(isEmergency() && !simpleSwitch.isChecked()){
+                        sendManualSOS();
+                    }
+
+                    if(simpleSwitch.isChecked())
+                    {
+                        hrvs.set(hrIndex , Double.parseDouble(data[1]));
+                        hrIndex = (hrIndex + 1) % hrvs.size();
+
+                        avgHRV.setText(
+                                hrvs.toString() + "\n\n" +
+                                        "Average Heart Rate = " + mean  + " \nStdDev =" + stdDev + "\n"
+                                        + "LowerBound = " + (mean - stdDev * scaleOfElimination) + "\n"
+                                        + "UpperBound = " + (mean + stdDev * scaleOfElimination) + "\n"
+                        );
+
+                    }
                 }
 
-                if(simpleSwitch.isChecked())
-                {
-                    hrvs.set(hrIndex , Double.parseDouble(data[1]));
-                    hrIndex = (hrIndex + 1) % hrvs.size();
-
-                    avgHRV.setText(
-                             hrvs.toString() + "\n\n" +
-                            "Average Heart Rate = " + mean  + " \nStdDev =" + stdDev + "\n"
-                            + "LowerBound = " + (mean - stdDev * scaleOfElimination) + "\n"
-                            + "UpperBound = " + (mean + stdDev * scaleOfElimination) + "\n"
-                    );
-
-                }
             }
+            if(intent.getAction().equals("LocServiceToActivityAction"))
+            {
+                Bundle notificationData = intent.getExtras();
+                String newData  = notificationData.getString("LocServiceToActivityAction");
+
+                latitude = Double.parseDouble(newData.split(";")[0]);
+                longitude = Double.parseDouble(newData.split(";")[1]);
+
+            }
+
 
 
 
@@ -219,10 +292,12 @@ public class MainActivity extends AppCompatActivity {
         phoneNumbers = new ArrayList<>();
         phoneNumbers.add("9246465080");
         for(int i = 0;i < phoneNumbers.size();i++){
-            String tosend = "HELP NEEDED!  "+ hrv+ "\n http://www.google.com/maps/place/" +  myPref.getString("Latitude","0.00") + "," + myPref.getString("Longitude","0.00");
+            String tosend = "HELP NEEDED!  "+ hrv+ "\n http://www.google.com/maps/place/" +  latitude + "," + longitude;
             toast(tosend);
 
-            smsManager.sendTextMessage(phoneNumbers.get(i),null,"HELP NEEDED!  "+ hrv+ "\n http://www.google.com/maps/place/" + myPref.getString("Latitude","0.00") + "," + myPref.getString("Longitude","0.00"),null,null);
+//            myPref.getString("Latitude","0.00")
+//            smsManager.sendTextMessage(phoneNumbers.get(i),null,"HELP NEEDED!  "+ hrv+ "\n http://www.google.com/maps/place/" + latitude + "," + longitude,null,null);
+            startCoolDown();
         }
     }
 

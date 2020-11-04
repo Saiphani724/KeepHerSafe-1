@@ -293,6 +293,13 @@ public class LocationService extends Service {
 
     }*/
 
+    private void sendMessageToActivity(String newData){
+        Intent broadcastIntent = new Intent();
+        broadcastIntent.setAction("LocServiceToActivityAction");
+        broadcastIntent.putExtra("LocServiceToActivityAction", newData);
+        sendBroadcast(broadcastIntent);
+    }
+
         private void getLocation () {
             LocationRequest mLocationRequestHighAccuracy = new LocationRequest();
             mLocationRequestHighAccuracy.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -312,6 +319,9 @@ public class LocationService extends Service {
                     Location location = locationResult.getLastLocation();
 
                     if (location != null) {
+
+                        sendMessageToActivity("" + location.getLatitude() + ";"  +  location.getLongitude());
+
                         EntityModel model = new EntityModel();
                         model.prediction = 1;
                         model.decision = 1;
@@ -323,18 +333,26 @@ public class LocationService extends Service {
                         myEdit.putString("Latitude",String.valueOf(model.latitude));
                         myEdit.putString("Longitude",String.valueOf(model.longitude));
                         myEdit.commit();
-                        model.pulse = new Random().nextInt(60) + 60;
-                        if(model.pulse < 65 || model.pulse>100){
-                            startCoolDown(model);
-                        }else {
 
-                            String id = myRef.push().getKey();
-                            myRef.child(id).setValue(model);
-                            dbManager.addDataPoint(model);
-                            Log.d("INSERTING NEW DATAPOINT:", model.pulse + "||" + model.latitude + "||" + model.longitude);
 
-                            Toast.makeText(getApplicationContext(), String.valueOf(dbManager.getAllPointsCount()), Toast.LENGTH_LONG).show();
-                        }
+
+//                        model.pulse = new Random().nextInt(60) + 60;
+
+//                        if(model.pulse < 65 || model.pulse>100)
+//                        {
+//                            startCoolDown(model);
+                            sendMessageToActivity("" + model.latitude + ";"  +  model.longitude);
+//                        }
+//                        else
+//                            {
+//
+//                            String id = myRef.push().getKey();
+//                            myRef.child(id).setValue(model);
+//                            dbManager.addDataPoint(model);
+//                            Log.d("INSERTING NEW DATAPOINT:", model.pulse + "||" + model.latitude + "||" + model.longitude);
+//
+//                            Toast.makeText(getApplicationContext(), String.valueOf(dbManager.getAllPointsCount()), Toast.LENGTH_LONG).show();
+//                        }
 
                         //User user = ((UserClient)(getApplicationContext())).getUser();
                         //GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
