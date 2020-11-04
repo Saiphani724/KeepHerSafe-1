@@ -1,0 +1,26 @@
+Index: app/src/main/res/layout/activity_main.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<RelativeLayout\r\n    xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n\r\n    android:orientation=\"vertical\"\r\n    android:padding=\"10dp\"\r\n    tools:context=\".MainActivity\">\r\n\r\n\r\n\r\n\r\n    <RelativeLayout\r\n        android:layout_width=\"fill_parent\"\r\n        android:layout_height=\"fill_parent\">\r\n\r\n        <TextView\r\n            android:id=\"@+id/calib\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:text=\"Callibration Mode\"\r\n            android:layout_marginTop=\"60dp\"\r\n            android:textSize=\"16dp\"\r\n            android:layout_marginLeft=\"120dp\">\r\n        </TextView>\r\n        <Switch\r\n            android:id=\"@+id/simpleSwitch\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_below=\"@id/calib\"\r\n            android:layout_marginLeft=\"160dp\"\r\n            />\r\n\r\n        <Button\r\n            android:id=\"@+id/login\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_marginLeft=\"100dp\"\r\n            android:layout_marginTop=\"150dp\"\r\n            android:gravity=\"center\"\r\n            android:onClick=\"startBtService\"\r\n            android:text=\"Reconnect Bluetooth\" />\r\n\r\n\r\n    </RelativeLayout>\r\n\r\n\r\n    <Button\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:onClick=\"startService\"\r\n        android:layout_marginTop=\"750dp\"\r\n        android:text=\"Start Service\" />\r\n    <Button\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:onClick=\"stopService\"\r\n        android:layout_marginTop=\"700dp\"\r\n        android:text=\"Stop Service\" />\r\n\r\n    <androidx.cardview.widget.CardView\r\n        xmlns:card_view=\"http://schemas.android.com/apk/res-auto\"\r\n        android:id=\"@+id/detected\"\r\n        android:layout_gravity=\"center\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_marginTop=\"250dp\"\r\n        android:layout_height=\"100dp\"\r\n        card_view:cardCornerRadius=\"4dp\">\r\n\r\n        <TextView\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"100dp\"\r\n            android:text=\"Heart Rate Detected\"\r\n            android:gravity=\"center\"\r\n            android:id=\"@+id/hearrateTV\"\r\n            />\r\n    </androidx.cardview.widget.CardView>\r\n\r\n    <androidx.cardview.widget.CardView\r\n        xmlns:card_view=\"http://schemas.android.com/apk/res-auto\"\r\n        android:id=\"@+id/calibrate\"\r\n        android:layout_gravity=\"center\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_marginTop=\"370dp\"\r\n        android:layout_height=\"wrap_content\"\r\n        card_view:cardCornerRadius=\"4dp\">\r\n\r\n        <TextView\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_marginTop=\"20dp\"\r\n            android:text=\"Average Heart Rate Calibrated\"\r\n            android:gravity=\"center\"\r\n            android:id=\"@+id/avgHRV\"\r\n            />\r\n    </androidx.cardview.widget.CardView>\r\n\r\n\r\n\r\n\r\n    <Button\r\n        android:id=\"@+id/SOSbutton\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginTop=\"650dp\"\r\n        android:text=\"Send SOS \" />\r\n\r\n\r\n</RelativeLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_main.xml	(revision 5b526c8c9f9ec66b68cb6a5c65ab740279bcbe4b)
++++ app/src/main/res/layout/activity_main.xml	(date 1604422354417)
+@@ -11,8 +11,6 @@
+     tools:context=".MainActivity">
+ 
+ 
+-
+-
+     <RelativeLayout
+         android:layout_width="fill_parent"
+         android:layout_height="fill_parent">
+@@ -44,7 +42,6 @@
+             android:onClick="startBtService"
+             android:text="Reconnect Bluetooth" />
+ 
+-
+     </RelativeLayout>
+ 
+ 

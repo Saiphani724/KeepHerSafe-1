@@ -11,8 +11,6 @@
     tools:context=".MainActivity">
 
 
-
-
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
@@ -33,6 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/calib"
             android:layout_marginLeft="60dp"
+            android:checked="true"
             />
 
         <Button
@@ -61,7 +60,7 @@
             android:layout_height="wrap_content"
             android:onClick="startService"
             android:layout_marginTop="500dp"
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="70dp"
             android:background="@drawable/mybutton"
             android:text="Start Service" />
         <Button

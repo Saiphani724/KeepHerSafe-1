@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private Button sendSOS;
     private Button viewProfile;
     Switch simpleSwitch;
-    Double latitude, longitude;
+    Double latitude = 0.0, longitude = 0.0;
     ArrayList<Double> hrvs;
     double hrv;
     int hrIndex = 0;
@@ -235,7 +235,8 @@ public class MainActivity extends AppCompatActivity {
                     hearrateTV.setText("Heart Rate Detected " + hrv);
 
                     if(isEmergency() && !simpleSwitch.isChecked()){
-                        sendManualSOS();
+//                        sendManualSOS();
+                        startCoolDown();
                     }
 
                     if(simpleSwitch.isChecked())
@@ -259,8 +260,10 @@ public class MainActivity extends AppCompatActivity {
                 Bundle notificationData = intent.getExtras();
                 String newData  = notificationData.getString("LocServiceToActivityAction");
 
+
                 latitude = Double.parseDouble(newData.split(";")[0]);
                 longitude = Double.parseDouble(newData.split(";")[1]);
+//                toast(latitude + " " + longitude);
 
             }
 
