@@ -5,12 +5,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
+    android:background="#CE070707"
     android:orientation="vertical"
     android:padding="10dp"
     tools:context=".MainActivity">
-
-
 
 
     <RelativeLayout
@@ -22,25 +20,29 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Callibration Mode"
-            android:layout_marginTop="60dp"
+            android:textColor="@color/color_preloader_end"
+            android:layout_marginTop="70dp"
             android:textSize="16dp"
-            android:layout_marginLeft="120dp">
+            android:layout_marginLeft="20dp">
         </TextView>
         <Switch
             android:id="@+id/simpleSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/calib"
-            android:layout_marginLeft="160dp"
+            android:layout_marginLeft="60dp"
+            android:checked="true"
             />
 
         <Button
             android:id="@+id/login"
-            android:layout_width="wrap_content"
+            android:layout_width="180dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="100dp"
-            android:layout_marginTop="150dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="70dp"
+            android:layout_toRightOf="@id/calib"
             android:gravity="center"
+            android:background="@drawable/mybutton"
             android:onClick="startBtService"
             android:text="Reconnect Bluetooth" />
 
@@ -48,54 +50,69 @@
     </RelativeLayout>
 
 
-    <Button
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="startService"
-        android:layout_marginTop="480dp"
-        android:text="Start Service" />
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="stopService"
-        android:layout_marginTop="550dp"
-        android:text="Stop Service" />
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/startButton"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:onClick="startService"
+            android:layout_marginTop="500dp"
+            android:layout_marginLeft="70dp"
+            android:background="@drawable/mybutton"
+            android:text="Start Service" />
+        <Button
+            android:id="@+id/stopButton"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:onClick="stopService"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="500dp"
+            android:background="@drawable/mybutton"
+            android:layout_toRightOf="@id/startButton"
+            android:text="Stop Service" />
+
+    </RelativeLayout>
+
 
     <androidx.cardview.widget.CardView
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/detected"
         android:layout_gravity="center"
         android:layout_width="match_parent"
-        android:layout_marginTop="250dp"
-        android:layout_height="100dp"
-        card_view:cardCornerRadius="4dp">
+        android:layout_marginTop="170dp"
+        android:layout_height="80dp"
+        card_view:cardCornerRadius="5dp">
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="80dp"
             android:text="Heart Rate Detected"
+            android:background="#D9E1E0"
+            android:textStyle="bold"
             android:gravity="center"
             android:id="@+id/hearrateTV"
             />
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/calibrate"
         android:layout_gravity="center"
         android:layout_width="match_parent"
-        android:layout_marginTop="370dp"
-        android:layout_height="wrap_content"
-        card_view:cardCornerRadius="4dp">
+        android:layout_marginTop="260dp"
+        android:layout_height="220dp"
+        app:cardCornerRadius="5dp">
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:layout_marginTop="20dp"
-            android:text="Average Heart Rate Calibrated"
-            android:gravity="center"
             android:id="@+id/avgHRV"
-            />
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:background="#D9E1E0"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:text="Average Heart Rate Calibrated" />
     </androidx.cardview.widget.CardView>
 
 
@@ -105,7 +122,8 @@
         android:id="@+id/SOSbutton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="650dp"
+        android:layout_marginTop="580dp"
+        android:background="@drawable/mybutton"
         android:text="Send SOS " />
 
 

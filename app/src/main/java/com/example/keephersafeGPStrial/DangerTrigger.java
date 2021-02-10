@@ -2,7 +2,7 @@ package com.example.keephersafeGPStrial;
 
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
-import android.content.SharedPreferences;
+//import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -27,11 +28,15 @@ public class DangerTrigger extends AppCompatActivity {
     boolean flag = false;
     ArrayList<String> phoneNumbers;
     SmsManager smsManager;
-    SharedPreferences myPref;
+//    SharedPreferences myPref;
     DBManager dbManager;
     EntityModel model;
     FirebaseDatabase firebase;
     DatabaseReference dref;
+
+    public void toast(String mess) {
+        Toast.makeText(this, mess, Toast.LENGTH_SHORT).show();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +74,8 @@ public class DangerTrigger extends AppCompatActivity {
         };
         Handler h = new Handler();
 
-        if(flag == false){
+        if(flag == false)
+        {
             try {
                 h.postDelayed(r, 15000);
             }catch(Exception e){
@@ -84,37 +90,38 @@ public class DangerTrigger extends AppCompatActivity {
 
     }
     public void stopTheAlert() {
-        h.removeCallbacksAndMessages(null);
-        model.decision = 0;
-        dbManager.addDataPoint(model);
-        Log.d("INSERTING NEW DATAPOINT_STOP:", model.pulse + "||" + model.latitude + "||" + model.longitude + "||" + model.decision);
-        String id = dref.push().getKey();
-        dref.child(id).setValue(model);
+//        h.removeCallbacksAndMessages(null);
+//        model.decision = 0;
+//        dbManager.addDataPoint(model);
+//        Log.d("INSERTING NEW DATAPOINT_STOP:", model.pulse + "||" + model.latitude + "||" + model.longitude + "||" + model.decision);
+//        String id = dref.push().getKey();
+//        dref.child(id).setValue(model);
         flag = true;
         Intent i = new Intent(this,MainActivity.class);
         startActivity(i);
-
     }
     public void sendSOS() {
         if(flag == true){
             Log.d("DangerTriggerClass","SOS stopped");
             return;
         }
-        myPref = getSharedPreferences("MySharedPref",MODE_PRIVATE);
+//        myPref = getSharedPreferences("MySharedPref",MODE_PRIVATE);
         model.decision = 1;
         dbManager.addDataPoint(model);
         Log.d("INSERTING NEW DATAPOINT_SOS:", model.pulse + "||" + model.latitude + "||" + model.longitude+"||" + model.decision);
         String id = dref.push().getKey();
         dref.child(id).setValue(model);
-        myPref = getSharedPreferences("MySharedPref",MODE_PRIVATE);
+//        myPref = getSharedPreferences("MySharedPref",MODE_PRIVATE);
         smsManager = SmsManager.getDefault();
         phoneNumbers = new ArrayList<>();
 //        phoneNumbers.add("");
 //        phoneNumbers.add("");
 //        phoneNumbers.add("");
         phoneNumbers.add("9246465080");
-        for(int i = 0;i < phoneNumbers.size();i++){
-            smsManager.sendTextMessage(phoneNumbers.get(i),null,"HELP NEEDED! http://www.google.com/maps/place/" + myPref.getString("Latitude","0.00") + "," + myPref.getString("Longitude","0.00"),null,null);
+        for(int i = 0;i < phoneNumbers.size();i++)
+        {
+            toast("HELP NEEDED! http://www.google.com/maps/place/" + model.latitude + "," + model.longitude + "from cool down");
+//            smsManager.sendTextMessage(phoneNumbers.get(i),null,"HELP NEEDED! http://www.google.com/maps/place/" + model.latitude + "," + model.longitude ,null,null);
         }
 
     }
